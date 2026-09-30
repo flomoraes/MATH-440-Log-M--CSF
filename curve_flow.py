@@ -73,7 +73,7 @@ def step(X, dt):
             for i in range(N)]
 
 
-# failure checks
+# failure checks - vibe coded portion
 def total_length(X):
     return sum(edge_lengths(X))
 
@@ -114,7 +114,7 @@ def check_failure(X, prev_length):
 
 # one full run
 def run(X0, dt, max_steps=200000, stop_length=0.05, snapshot_every=None):
-    """Run the flow with a FIXED dt.
+    """Run the flow
     Returns (status, step_number, time, snapshots, final_X).
     status is 'failed: ...' or 'shrank to a point (success)'."""
     X = [p[:] for p in X0]
@@ -137,7 +137,7 @@ def run(X0, dt, max_steps=200000, stop_length=0.05, snapshot_every=None):
     return "hit max_steps without failing", max_steps, max_steps * dt, snapshots, X
 
 
-# plotting
+# plotting - vibe coded, new to plotting
 def plot_run(X0, dt, title, filename, snapshot_every=None):
     status, n, t, snaps, Xf = run(X0, dt, snapshot_every=snapshot_every)
     fig, ax = plt.subplots(figsize=(6, 6))
