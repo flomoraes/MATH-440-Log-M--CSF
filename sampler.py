@@ -117,12 +117,12 @@ def plot_result(result):
     plt.show()
 
 
-def interpolate(result, tour):
+def interpolate(result, tour, n):
 
     x = [result[i][0] for i  in tour]
     y = [result[i][1] for i in tour]
 
-    tck, u = splprep([x,y], s = 2000, k = 5, per = True)
+    tck, u = splprep([x,y], s = n + np.sqrt(n), k = 3, per = True)
 
     u_new = np.linspace(0,1,300)
 
@@ -136,27 +136,47 @@ def plot_smooth(x_smooth, y_smooth):
     plt.grid(True)
     plt.show()
 
+def plot_both(x_smooth, y_smooth, result, tour):
+
+    fig, (ax1, ax2) = plt.subplots(1,2)
+    path = tour + [tour]
+
+    x = [result[i][0] for i  in tour]
+    y = [result[i][1] for i in tour]
+    ax1.plot(x,y, marker = 'o', linestyle = '-', color = 'blue')    
+    ax1.grid(True)
+
+    ax2.plot(x_smooth, y_smooth)
+    ax2.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+    
+def not_intersecting(x_smooth, y_smooth):
+    return 0
+    
+
 
 #TESTING BLOCK
 def main():
-    result = random_init(100, 100, 100, (np.pi / 6), 5)
-    plot_result(result)
+    n = int(np.ceil(55 * np.random.random()) + 5)
+
+    print(f"{n} points")
+
+    x = int(50 * ((np.random.random() + 1) * n))
+    print({x})
+    y = int(50 * ((np.random.random() + 1) * n))
+    print({y})
+
+    result = random_init(n, x, y, (np.pi / 6), 5)
 
     tour = tsp(result)
 
-    #check tsp is right
-    plot_route(result, tour)
+    x_s, y_s = interpolate(result, tour, n)
+    plot_both(x_s, y_s, result, tour)
 
-    x_s, y_s = interpolate(result, tour)
-    plot_smooth(x_s, y_s)
-
-    # can still overlap from interpolation, 
-    # but it could be from smoothing factor being too high, 
-    # so need to see what smoothing factor to pick
-    return 0
-
-if __name__ == "__main__":
-    main()
+    # can still overlap from interpolation, put up a quick check for peace of mind
     return 0
 
 if __name__ == "__main__":
